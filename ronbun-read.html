@@ -208,6 +208,9 @@ function next_onClick(){
     else proc=Promise.resolve();
 
     proc.then((result)=>{
+	if($("#memo").val()=="" || $("#reason").val()==""){
+		
+	}else{
         ++tab_i;
         //iframeに表示
         $("#summary_field").attr("src",tab[tab_i][1]);
@@ -215,6 +218,7 @@ function next_onClick(){
         $("#memo").val("");
         $("#rating").val("5");
         $("#reason").val("");
+	}
     }).catch((error)=>{
         console.error(error);
     });
