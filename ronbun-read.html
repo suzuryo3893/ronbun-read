@@ -153,6 +153,10 @@ function reload_onClick(){
             }
         }
         tab_i=-1;
+	var bar = document.getElementById('prg');
+	var txt = document.getElementById('pct');
+	bar.value = (50-tab.length) * 2
+	txt.value = bar.value
         next_onClick();
     }).catch((error)=>{
         console.error(error);
@@ -163,7 +167,7 @@ function progress(){
 	var bar = document.getElementById('prg');
 	var txt = document.getElementById('pct');
 	if(bar.value < bar.max){
-	bar.value++;
+	bar.value+=2;
 	txt.value=bar.value;
 	}
 }
