@@ -113,7 +113,7 @@ function reload_onClick(){
                 //result.result.values[i][1]; //url
                 //result.result.values[i][2]; //uname
                 if(result.result.values[i][2]==username){
-                    tab.append([result.result.values[i][0],result.result.values[i][1],result.result.values[i][2]]);
+                    tab.push([result.result.values[i][0],result.result.values[i][1],result.result.values[i][2]]);
                 }
             }
             resolve();
@@ -134,7 +134,7 @@ function reload_onClick(){
         //result.result.values[i][5]; //reason
         for(var i=0; result.result.values && i<result.result.values.length;++i){
             if(result.result.values[i][1]==username){
-                tab_log.append([
+                tab_log.push([
                     result.result.values[i][0],
                     result.result.values[i][1],
                     result.result.values[i][2],
