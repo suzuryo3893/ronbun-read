@@ -178,7 +178,12 @@ function progress(){
 	
 function next_onClick(){
     var proc;
-    if(tab_i>=0){	
+    if(tab_i>=0){
+	if($("#memo").val()=="" || $("#reason").val()==""){
+		--tab_i;
+		var warn = "空欄があります";
+		alert(warn);
+	}else{
         // Dateオブジェクトを作成
         var date = new Date() ;
         // UNIXタイムスタンプを取得する (ミリ秒単位)
@@ -198,7 +203,7 @@ function next_onClick(){
             }
         });
 	progress();
-	
+	}
     }
     else proc=Promise.resolve();
 
