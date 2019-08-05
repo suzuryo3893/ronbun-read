@@ -139,13 +139,14 @@ function reload_onClick(){
     }).then((result)=>{
       tab=[];
       for(var i=0;result.result.values && i<result.result.values.length;++i){
-        flag = true
+        flag = true;
         for(var j=0;j<tab_log.length;++j){
               //result.result.values[i][0]; //pid
               //result.result.values[i][1]; //url
               //result.result.values[i][2]; //uname
               if(tab_log[j][2]==result.result.values[i][0])
-                flag = false
+                flag = false;
+                break;
             }
             if(result.result.values[i][2]==username && flag == true){
                 tab.push([result.result.values[i][0],result.result.values[i][1],result.result.values[i][2]]);
