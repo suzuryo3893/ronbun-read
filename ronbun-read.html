@@ -155,7 +155,7 @@ function reload_onClick(){
         tab_i=-1;
 	var bar = document.getElementById('prg');
 	var txt = document.getElementById('pct');
-	bar.value = 50-tab.length-1;
+	bar.value = 50-tab.length;
 	txt.value = bar.value;
         next_onClick();
     }).catch((error)=>{
