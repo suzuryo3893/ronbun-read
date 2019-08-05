@@ -172,13 +172,7 @@ function progress(){
 	
 function next_onClick(){
     var proc;
-    is_fill = true;
-    if(tab_i>=0){
-	if($("#memo").val()=="" || $("#reason").val()==""){
-		var warn = "空欄があります";
-		alert(warn);
-		is_fill = false;
-	}else{
+    if(tab_i>=0){	
         // Dateオブジェクトを作成
         var date = new Date() ;
         // UNIXタイムスタンプを取得する (ミリ秒単位)
@@ -198,11 +192,10 @@ function next_onClick(){
             }
         });
 	progress();
-	}
+	
     }
     else proc=Promise.resolve();
     proc.then((result)=>{
-	if is_fill{
         ++tab_i;
         //iframeに表示
         $("#summary_field").attr("src",tab[tab_i][1]);
@@ -210,7 +203,6 @@ function next_onClick(){
         $("#memo").val("");
         $("#rating").val("5");
         $("#reason").val("");
-	}
     }).catch((error)=>{
         console.error(error);
     });
