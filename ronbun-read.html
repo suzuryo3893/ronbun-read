@@ -179,15 +179,16 @@ function next_onClick(){
 </head>
 <body>
 <div id="control">
-<button id="signin" onClick="signin_google_onClick();">Google Sign in</button>
+<button id="signin" onClick="signin_google_onClick();">SignIn</button>
 <button id="reload" onClick="reload_onClick();" disabled>Reload</button>
 memo:<input type="text" id="memo" name="memo" val="" />
-<select id="rating">
-        <option id="rating_5" name="rating_5">5</option>>
-        <option id="rating_4" name="rating_4">4</option>>
-        <option id="rating_3" name="rating_3">3</option>>
-        <option id="rating_2" name="rating_2">2</option>>
-        <option id="rating_1" name="rating_1">1</option>>
+rate:<select id="rating">
+        <option id="rating_5" name="rating_5">5</option>
+        <option id="rating_4" name="rating_4">4</option>
+        <option id="rating_3" name="rating_3">3</option>
+        <option id="rating_2" name="rating_2">2</option>
+        <option id="rating_1" name="rating_1">1</option>
+</select>
 reason:<input type="text" id="reason" name="reason" val="" />
 <button id="next" onClick="next_onClick();">next</button>
 </div>
