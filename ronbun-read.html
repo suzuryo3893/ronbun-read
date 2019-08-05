@@ -180,7 +180,7 @@ function next_onClick(){
         warn = "空欄があります";
         alert(warn);
         is_filled = false;
-      }
+      }else{
         // Dateオブジェクトを作成
         var date = new Date() ;
         // UNIXタイムスタンプを取得する (ミリ秒単位)
@@ -200,11 +200,13 @@ function next_onClick(){
             }
         });
 	progress();
-
+}
     }
     else proc=Promise.resolve();
     proc.then((result)=>{
+      if(is_filled ==true){
         ++tab_i;
+      }
         //iframeに表示
         $("#summary_field").attr("src",tab[tab_i][1]);
         //コンパネリセット
