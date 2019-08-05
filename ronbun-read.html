@@ -14,7 +14,7 @@
 <script src="https://www.gstatic.com/firebasejs/5.0.0/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/5.0.0/firebase-database.js"></script>
 
-  
+
 <script>
 gapi.load('client:auth2', ()=> {
   gapi.client.init({
@@ -59,13 +59,13 @@ var username="";
 function signin_google_onClick(){
 	$("#status").text('');
 	$("#reload").attr('disabled', true);
-	
+
 	//google apiの認証を使う場合
 	//アプリ登録していないと，安全でないページとか出てきていやらしい
 //    const auth = gapi.auth2.getAuthInstance();
 //    auth.signIn().then(function(user){
 //		return reload_onClick();
-//	}, function(error){ 
+//	}, function(error){
 //		$("#status").text('Google Sign in failed.');
 //		console.log(error);
 //		return Promise.reject(error);
@@ -76,8 +76,8 @@ function signin_google_onClick(){
 //		$('#status').text('Google Sign in failure. See console log for detail.');
 //		console.log(error);
 //	});
-//	
-	
+//
+
 	//firebaseの認証を使う場合
 	firebase.auth().signInWithPopup(googleProvider).then(function(result) {
 		// This gives you a Google Access Token. You can use it to access the Google API.
@@ -87,7 +87,7 @@ function signin_google_onClick(){
 		// ...
 		gapi.client.setToken({access_token : googleToken});
 		return reload_onClick();
-	}, function(error){ 
+	}, function(error){
 		//$("#status").text('Google Sign in failed.');
 		console.log(error);
 		return Promise.reject(error);
@@ -103,48 +103,55 @@ function signin_google_onClick(){
 function reload_onClick(){
     //read list file
     gapi.client.sheets.spreadsheets.values.get({
-        spreadsheetId : spreadsheetId,
-        range: 'main!A2:C'
+      spreadsheetId : spreadsheetId_log,
+      range: 'main!A2:F'
     }).then((result)=>{
         return new Promise((resolve,reject)=>{
-            tab=[];
-            for(var i=0;result.result.values && i<result.result.values.length;++i){
-                //result.result.values[i][0]; //pid
-                //result.result.values[i][1]; //url
-                //result.result.values[i][2]; //uname
-                if(result.result.values[i][2]==username){
-                    tab.push([result.result.values[i][0],result.result.values[i][1],result.result.values[i][2]]);
-                }
-            }
+          tab_log=[];
+          //result.result.values[i][0]; //timestamp
+          //result.result.values[i][1]; //uname
+          //result.result.values[i][2]; //pid
+          //result.result.values[i][3]; //memo
+          //result.result.values[i][4]; //rating
+          //result.result.values[i][5]; //reason
+          for(var i=0; result.result.values && i<result.result.values.length;++i){
+              if(result.result.values[i][1]==username){
+                  tab_log.push([
+                      result.result.values[i][0],
+                      result.result.values[i][1],
+                      result.result.values[i][2],
+                      result.result.values[i][3],
+                      result.result.values[i][4],
+                      result.result.values[i][5]
+                  ]);
+              }
+          }
             resolve();
         });
     }).then(()=>{
         //read log file
         //timestamp,uname,pid,memo,rating,reason
         return gapi.client.sheets.spreadsheets.values.get({
-            spreadsheetId : spreadsheetId_log,
-            range: 'main!A2:F'
+
+            spreadsheetId : spreadsheetId,
+            range: 'main!A2:C'
         });
     }).then((result)=>{
-        tab_log=[];
-        //result.result.values[i][0]; //timestamp
-        //result.result.values[i][1]; //uname
-        //result.result.values[i][2]; //pid
-        //result.result.values[i][3]; //memo
-        //result.result.values[i][4]; //rating
-        //result.result.values[i][5]; //reason
-        for(var i=0; result.result.values && i<result.result.values.length;++i){
-            if(result.result.values[i][1]==username){
-                tab_log.push([
-                    result.result.values[i][0],
-                    result.result.values[i][1],
-                    result.result.values[i][2],
-                    result.result.values[i][3],
-                    result.result.values[i][4],
-                    result.result.values[i][5]
-                ]);
+      tab=[];
+      for(var i=0;result.result.values && i<result.result.values.length;++i){
+        flag = true
+        for(var j=0;j<tab_log.length;++j){
+              //result.result.values[i][0]; //pid
+              //result.result.values[i][1]; //url
+              //result.result.values[i][2]; //uname
+              if(tab_log[j][2] == result.result.values[i][0])
+                flag = false
             }
-        }
+            if(result.result.values[i][2]==username && flag == true){
+                tab.push([result.result.values[i][0],result.result.values[i][1],result.result.values[i][2]]);
+            }
+      }
+
 
         tab_i=-1;
         next_onClick();
