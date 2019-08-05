@@ -161,12 +161,14 @@ function next_onClick(){
         //保存
         gapi.client.sheets.spreadsheets.values.update({
             spreadsheetId: spreadsheetId_log,
+            range: "A2:F",
+            valueInputOption: "RAW",
             resource: {
-                range: "A2:F",
-                majorDimension: "ROWS",
                 values:[
-                    timestamp,username,tab[tab_i][0],$("#memo").val(),$("#rating").val(),$("#reason").val()
+                    [timestamp,username,tab[tab_i][0],$("#memo").val(),$("#rating").val(),$("#reason").val()]
                 ],
+                majorDimension: "ROWS",
+                range: "A2:F"
             }
         });
     }
