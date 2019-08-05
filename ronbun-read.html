@@ -146,6 +146,7 @@ function reload_onClick(){
               //result.result.values[i][2]; //uname
               if(tab_log[j][2] == result.result.values[i][0])
                 flag = false
+                break
             }
             if(result.result.values[i][2]==username && flag == true){
                 tab.push([result.result.values[i][0],result.result.values[i][1],result.result.values[i][2]]);
