@@ -160,17 +160,17 @@ function next_onClick(){
         // UNIXタイムスタンプを取得する (ミリ秒単位)
         var timestamp = date.getTime() ;
         //保存
-        proc=gapi.client.sheets.spreadsheets.values.update({
-            spreadsheetId: spreadsheetId_log,
+        proc=gapi.client.sheets.spreadsheets.values.append({
+            spreadsheetId: "1gXzX0F7u5rDbNUIs-Ci4ip73QNjw97NwKYUJMznzAdo",
             range: "A2:F",
+            insertDataOption: "INSERT_ROWS",
             valueInputOption: "RAW",
-            insertRowsOption: "INSERT_ROWS",
             resource: {
-                values:[
-                    [timestamp,username,tab[tab_i][0],$("#memo").val(),$("#rating").val(),$("#reason").val()]
-                ],
+                range: "A2:F",
                 majorDimension: "ROWS",
-                range: "A2:F"
+                values: [
+                    [timestamp,username,tab[tab_i][0],$("#memo").val(),$("#rating").val(),$("#reason").val()]
+                ]
             }
         });
     }
