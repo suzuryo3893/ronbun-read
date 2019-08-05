@@ -164,7 +164,8 @@ function reload_onClick(){
 }
 
 function progress(){
-
+	var bar = document.getElementById('prg');
+	var txt = document.getElementById('pct');
 	if(bar.value < bar.max){
 	bar.value++;
 	txt.value=bar.value;
