@@ -188,9 +188,6 @@ function next_onClick(){
         ++tab_i;
         //iframeに表示
         $("#summary_field").attr("src",tab[tab_i][1]);
-        $("#memo").set("");
-        $("#reason").set("");
-        $("#rating").set(5)
     }).catch((error)=>{
         console.error(error);
     });
