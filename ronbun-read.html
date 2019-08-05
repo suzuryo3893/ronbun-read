@@ -229,16 +229,18 @@ function next_onClick(){
 <div id="control">
 <button id="signin" onClick="signin_google_onClick();">SignIn</button>
 <button id="reload" onClick="reload_onClick();" disabled>Reload</button>
-memo:<input type="text" id="memo" name="memo" value=""/>
+memo:<input type="text" id="memo" name="memo" value="" style="width:50%"/>
 	</br>
 rate:<select id="rating">
-        <option id="rating_5" name="rating_5" value="5">5</option>
-        <option id="rating_4" name="rating_4" value="4">4</option>
-        <option id="rating_3" name="rating_3" value="3">3</option>
-        <option id="rating_2" name="rating_2" value="2">2</option>
-        <option id="rating_1" name="rating_1" value="1">1</option>
+        <option id="rating_5" name="rating_5" value="5">5:読んでみたい</option>
+        <option id="rating_4" name="rating_4" value="4">4:どちらかというと読んでみたい</option>
+        <option id="rating_3" name="rating_3" value="3">3:わからない</option>
+        <option id="rating_2" name="rating_2" value="2">2:どちらかというと読みたくない</option>
+        <option id="rating_1" name="rating_1" value="1">1:読みたくない</option>
 </select>
-reason:<input type="text" id="reason" name="reason" value=""/>
+	</br>
+reason:<input type="text" id="reason" name="reason" value="" style="width:50%"/>
+	</br>
 <button id="next" onClick="next_onClick();">next</button>
 </div>
 <p>Reading progress:
