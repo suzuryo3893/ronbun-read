@@ -108,12 +108,12 @@ function reload_onClick(){
     }).then((result)=>{
         return new Promise((resolve,reject)=>{
             tab=[];
-            for(var i=0;i<result.values.length;++i){
-                //result.values[i][0]; //pid
-                //result.values[i][1]; //url
-                //result.values[i][2]; //uname
-                if(result.values[i][2]==username){
-                    tab.append([result.values[i][0],result.values[i][1],result.values[i][2]]);
+            for(var i=0;i<result.result.values.length;++i){
+                //result.result.values[i][0]; //pid
+                //result.result.values[i][1]; //url
+                //result.result.values[i][2]; //uname
+                if(result.result.values[i][2]==username){
+                    tab.append([result.result.values[i][0],result.result.values[i][1],result.result.values[i][2]]);
                 }
             }
             resolve();
@@ -126,20 +126,20 @@ function reload_onClick(){
             range: 'main!A2:F'
         });
     }).then((result)=>{
-        //result.values[i][0]; //timestamp
-        //result.values[i][1]; //uname
-        //result.values[i][2]; //pid
-        //result.values[i][3]; //memo
-        //result.values[i][4]; //rating
-        //result.values[i][5]; //reason
+        //result.result.values[i][0]; //timestamp
+        //result.result.values[i][1]; //uname
+        //result.result.values[i][2]; //pid
+        //result.result.values[i][3]; //memo
+        //result.result.values[i][4]; //rating
+        //result.result.values[i][5]; //reason
         if(result.values[i][1]==username){
             tab_log.append([
-                result.values[i][0],
-                result.values[i][1],
-                result.values[i][2],
-                result.values[i][3],
-                result.values[i][4],
-                result.values[i][5]
+                result.result.values[i][0],
+                result.result.values[i][1],
+                result.result.values[i][2],
+                result.result.values[i][3],
+                result.result.values[i][4],
+                result.result.values[i][5]
             ]);
         }
 
