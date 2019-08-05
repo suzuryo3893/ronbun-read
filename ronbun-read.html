@@ -157,6 +157,7 @@ function reload_onClick(){
         console.error(error);
     });
 }
+
 function progress(){
 	var bar = document.getElementById('prg');
 	var txt = document.getElementById('pct');
@@ -172,6 +173,12 @@ function progress(){
 
 function next_onClick(){
     var proc;
+    is_filled = true;
+    if($("#memo").val()==""||$("#reason").val()==""){
+      warn = "空欄があります";
+      alert(warn);
+      is_filled = false;
+    }
     if(tab_i>=0){
         // Dateオブジェクトを作成
         var date = new Date() ;
