@@ -35,7 +35,7 @@ var firebaseConfig = {
     messagingSenderId: "855946259820",
     appId: "1:855946259820:web:389186b6fbf6a329"
   };
-firebase.initializeApp(firbaseConfig);
+firebase.initializeApp(firebaseConfig);
 var fireDatabase = null; //= firebase.database();
 //ゲットしたトークンをgoogleApiに読み込ませる方法が分からなかったので，firebase apiの認証ではなくgoogle apiの認証を使うことに
 var googleProvider = new firebase.auth.GoogleAuthProvider();
