@@ -153,13 +153,14 @@ function reload_onClick(){
     });
 }
 function next_onClick(){
+    var proc;
     if(tab_i>=0){
         // Dateオブジェクトを作成
         var date = new Date() ;
         // UNIXタイムスタンプを取得する (ミリ秒単位)
         var timestamp = date.getTime() ;
         //保存
-        gapi.client.sheets.spreadsheets.values.update({
+        proc=gapi.client.sheets.spreadsheets.values.update({
             spreadsheetId: spreadsheetId_log,
             range: "A2:F",
             valueInputOption: "RAW",
@@ -172,9 +173,15 @@ function next_onClick(){
             }
         });
     }
-    ++tab_i;
-    //iframeに表示
-    $("#summary_field").attr("src",tab[tab_i][1]);
+    else proc=Promise.resolve();
+
+    proc.then((result)=>{
+        ++tab_i;
+        //iframeに表示
+        $("#summary_field").attr("src",tab[tab_i][1]);
+    }).catch((error)=>{
+        console.error(error);
+    });
 }
 
 </script>
