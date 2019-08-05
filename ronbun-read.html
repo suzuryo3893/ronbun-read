@@ -172,7 +172,7 @@ function progress(){
 	}
 	if(bar.value == bar.max){
 		txt.value = 'Finished!';
-		document.getElementById('summary_field').removeAttribute('src');
+		$("#summary_field").attr("src","about:blank");
 	}
 }
 	
