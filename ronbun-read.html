@@ -178,10 +178,12 @@ function progress(){
 	
 function next_onClick(){
     var proc;
+    var is_fill = true;
     if(tab_i>=0){
 	if($("#memo").val()=="" || $("#reason").val()==""){
 		var warn = "空欄があります";
 		alert(warn);
+		is fill = false;
 	}else{
         // Dateオブジェクトを作成
         var date = new Date() ;
@@ -207,9 +209,7 @@ function next_onClick(){
     else proc=Promise.resolve();
 
     proc.then((result)=>{
-	if($("#memo").val()=="" || $("#reason").val()==""){
-		
-	}else{
+	if is_fill{
         ++tab_i;
         //iframeに表示
         $("#summary_field").attr("src",tab[tab_i][1]);
