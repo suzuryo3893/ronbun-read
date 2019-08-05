@@ -165,7 +165,7 @@ function next_onClick(){
                 range: "A2:F",
                 majorDimension: "ROWS",
                 values:[
-                    timestamp,username,tab[tab_i][0],$("#memo").value(),$("#rating").value(),$("#reason").value()
+                    timestamp,username,tab[tab_i][0],$("#memo").val(),$("#rating").val(),$("#reason").val()
                 ],
             }
         });
@@ -181,7 +181,7 @@ function next_onClick(){
 <div id="control">
 <button id="signin" onClick="signin_google_onClick();">SignIn</button>
 <button id="reload" onClick="reload_onClick();" disabled>Reload</button>
-memo:<input type="text" id="memo" name="memo" val="" />
+memo:<input type="text" id="memo" name="memo" value="" />
 rate:<select id="rating">
         <option id="rating_5" name="rating_5">5</option>
         <option id="rating_4" name="rating_4">4</option>
@@ -189,7 +189,7 @@ rate:<select id="rating">
         <option id="rating_2" name="rating_2">2</option>
         <option id="rating_1" name="rating_1">1</option>
 </select>
-reason:<input type="text" id="reason" name="reason" val="" />
+reason:<input type="text" id="reason" name="reason" value="" />
 <button id="next" onClick="next_onClick();">next</button>
 </div>
 <iframe id="summary_field" src="#" style="width:100%;height:100%"></iframe>
