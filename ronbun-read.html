@@ -170,7 +170,9 @@ function progress(){
 	++bar.value;
 	txt.value=bar.value;
 	}
-	
+	if(bar.value == bar.max){
+		txt.value = 'Finished!'
+	}
 }
 	
 function next_onClick(){
