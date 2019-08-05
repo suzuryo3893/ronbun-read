@@ -108,7 +108,7 @@ function reload_onClick(){
     }).then((result)=>{
         return new Promise((resolve,reject)=>{
             tab=[];
-            for(var i=0;i<result.result.values.length;++i){
+            for(var i=0;result.result.values && i<result.result.values.length;++i){
                 //result.result.values[i][0]; //pid
                 //result.result.values[i][1]; //url
                 //result.result.values[i][2]; //uname
@@ -132,7 +132,7 @@ function reload_onClick(){
         //result.result.values[i][3]; //memo
         //result.result.values[i][4]; //rating
         //result.result.values[i][5]; //reason
-        for(var i=0;i<result.result.values.length;++i){
+        for(var i=0; result.result.values && i<result.result.values.length;++i){
             if(result.result.values[i][1]==username){
                 tab_log.append([
                     result.result.values[i][0],
