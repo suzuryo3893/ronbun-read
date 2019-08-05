@@ -164,6 +164,7 @@ function next_onClick(){
             spreadsheetId: spreadsheetId_log,
             range: "A2:F",
             valueInputOption: "RAW",
+            insertRowsOption: "INSERT_ROWS",
             resource: {
                 values:[
                     [timestamp,username,tab[tab_i][0],$("#memo").val(),$("#rating").val(),$("#reason").val()]
