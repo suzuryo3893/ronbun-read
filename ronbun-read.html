@@ -174,12 +174,13 @@ function progress(){
 function next_onClick(){
     var proc;
     is_filled = true;
-    if($("#memo").val()==""||$("#reason").val()==""){
-      warn = "空欄があります";
-      alert(warn);
-      is_filled = false;
-    }
+
     if(tab_i>=0){
+      if($("#memo").val()==""||$("#reason").val()==""){
+        warn = "空欄があります";
+        alert(warn);
+        is_filled = false;
+      }
         // Dateオブジェクトを作成
         var date = new Date() ;
         // UNIXタイムスタンプを取得する (ミリ秒単位)
