@@ -160,7 +160,13 @@ function reload_onClick(){
 }
 
 function progress(){
-	var bar = document.getElementById(}|'
+	var bar = document.getElementById('prg');
+	var txt = document.getElementById('pct');
+	if(bar.value < bar.max){
+	bar.value++;
+	txt.value=bar.value;
+	}
+}
 	
 function next_onClick(){
     var proc;
@@ -194,6 +200,7 @@ function next_onClick(){
         $("#memo").val("");
         $("#rating").val("5");
         $("#reason").val("");
+	progress();
     }).catch((error)=>{
         console.error(error);
     });
