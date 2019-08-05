@@ -172,15 +172,13 @@ function progress(){
 	}
 	if(bar.value == bar.max){
 		txt.value = 'Finished!';
-		$("#summary_field").attr("src","about:blank");
+		document.getElementById('summary_field').removeAttribute('src');
 	}
 }
 	
 function next_onClick(){
     var proc;
-    var blank_check = true;
-    if(tab_i>=0){
-	
+    if(tab_i>=0){	
         // Dateオブジェクトを作成
         var date = new Date() ;
         // UNIXタイムスタンプを取得する (ミリ秒単位)
@@ -212,7 +210,6 @@ function next_onClick(){
         $("#memo").val("");
         $("#rating").val("5");
         $("#reason").val("");
-	
     }).catch((error)=>{
         console.error(error);
     });
