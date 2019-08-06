@@ -57,6 +57,7 @@ var tab = [];
 var tab_log = [];
 var tab_i = 0;
 var username = "";
+var regronbun_count=50;
 function signin_google_onClick(){
     $("#status").text('');
     $("#reload").attr('disabled', true);
@@ -138,6 +139,7 @@ function reload_onClick(){
             range: 'main!A2:C'
         });
     }).then((result)=>{
+        regronbun_count=0;
         tab = [];
         for (var i = 0; result.result.values && i < result.result.values.length; ++i){
             //result.result.values[i][0]; //pid
@@ -145,6 +147,7 @@ function reload_onClick(){
             //result.result.values[i][2]; //uname
             ////自分の割り当ての未読のものだけ対象にする
             if (result.result.values[i][2] == username){
+                ++regronbun_count;
                 //未読チェック
                 var foundidx = tab_log.findIndex((e) => { return e[2] == result.result.values[i][0] });
                 if (foundidx == -1)
@@ -154,7 +157,8 @@ function reload_onClick(){
         tab_i = -1;
         var bar = document.getElementById('prg');
         var txt = document.getElementById('pct');
-        bar.value = 50 - tab.length;
+        bar.max=regronbun_count;
+        bar.value = regronbun_count - tab.length;
         txt.value = bar.value;
         next_onClick();
     }).catch((error)=>{
@@ -202,24 +206,31 @@ function next_onClick(){
                     ]
                 }
             });
-            progress();
         }
     }
     else proc = Promise.resolve();
     proc.then((result)=>{
-        if (is_filled == true) {
+        if (is_filled) {
+            progress();
             ++tab_i;
+            //iframeに表示
+            $("#summary_field").attr("src", tab.length>0?tab[tab_i][1]:"about:blank");
+            //コンパネリセット
+            $("#memo").val("");
+            $("#rating").val("5");
+            $("#reason").val("");
         }
-        //iframeに表示
-        $("#summary_field").attr("src", tab.length>0?tab[tab_i][1]:"about:blank");
-        //コンパネリセット
-        $("#memo").val("");
-        $("#rating").val("5");
-        $("#reason").val("");
     }).catch((error)=>{
         console.error(error);
     });
 }
+
+//OnLoad
+$(()=>{
+    $("#prg").attr("max",""+regronbun_count);
+    $("#allcnt").text(""+regronbun_count);
+})
+
 </script>
 </head>
 
@@ -242,7 +253,7 @@ reason:<input type="text" id="reason" name="reason" value="" style="width:75%" /
 <button id="next" onClick="next_onClick();">next</button>
 </div>
 <p>
-Reading progress:<progress id="prg" max="50" value="0"> 0% </progress> :<output id="pct">0</output>/50
+Reading progress:<progress id="prg" max="50" value="0"> 0% </progress> :<output id="pct">0</output>/<span id="allcnt">50</span>
 </p>
 <iframe id="summary_field" src="about:blank" style="width:100%;height:100%"></iframe>
 </body>
