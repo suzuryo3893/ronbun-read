@@ -1,4 +1,5 @@
 <html>
+
 <head>
 <meta charset="utf-8" />
 <title>Ronbun annotator</title>
@@ -16,13 +17,13 @@
 
 
 <script>
-gapi.load('client:auth2', ()=> {
-  gapi.client.init({
-    clientId: '855946259820-6i128sbj0qns59uke29m8ac6dlv3i7dl.apps.googleusercontent.com',
-	//clientId: '104833731383104351698',
-    scope: 'https://www.googleapis.com/auth/spreadsheets',
-    discoveryDocs: ['https://sheets.googleapis.com/$discovery/rest?version=v4']
-  })
+gapi.load('client:auth2', ()=>{
+    gapi.client.init({
+        clientId: '855946259820-6i128sbj0qns59uke29m8ac6dlv3i7dl.apps.googleusercontent.com',
+        //clientId: '104833731383104351698',
+        scope: 'https://www.googleapis.com/auth/spreadsheets',
+        discoveryDocs: ['https://sheets.googleapis.com/$discovery/rest?version=v4']
+    });
 });
 var spreadsheetId = '107JQ0Lu3SSIUHyQa2VsadOtgovzHjYWBKj1lZ07eygU';
 var spreadsheetId_log = '1gXzX0F7u5rDbNUIs-Ci4ip73QNjw97NwKYUJMznzAdo';
@@ -34,7 +35,7 @@ var firebaseConfig = {
     storageBucket: "",
     messagingSenderId: "855946259820",
     appId: "1:855946259820:web:389186b6fbf6a329"
-  };
+};
 firebase.initializeApp(firebaseConfig);
 var fireDatabase = null; //= firebase.database();
 //ゲットしたトークンをgoogleApiに読み込ませる方法が分からなかったので，firebase apiの認証ではなくgoogle apiの認証を使うことに
@@ -46,112 +47,120 @@ var googleToken = null;
 var githubProvider = new firebase.auth.GithubAuthProvider();
 githubProvider.addScope('public_repo,read:user');
 githubProvider.setCustomParameters({
-	'allow_signup': 'false'
+    'allow_signup': 'false'
 });
 var githubToken = null;
 var githubApi = null;
 var issueApi = null;
 //internal database storage
-var tab=[];
-var tab_log=[];
-var tab_i=0;
-var username="";
+var tab = [];
+var tab_log = [];
+var tab_i = 0;
+var username = "";
+var regronbun_count=50;
 function signin_google_onClick(){
-	$("#status").text('');
-	$("#reload").attr('disabled', true);
-	//google apiの認証を使う場合
-	//アプリ登録していないと，安全でないページとか出てきていやらしい
-//    const auth = gapi.auth2.getAuthInstance();
-//    auth.signIn().then(function(user){
-//		return reload_onClick();
-//	}, function(error){
-//		$("#status").text('Google Sign in failed.');
-//		console.log(error);
-//		return Promise.reject(error);
-//	}).then(function(response){
-//		$("#reload").attr('disabled', false);
-//		$("#status").text('Google Sign in succeeded.');
-//	}).catch(function(error){
-//		$('#status').text('Google Sign in failure. See console log for detail.');
-//		console.log(error);
-//	});
-//
-	//firebaseの認証を使う場合
-	firebase.auth().signInWithPopup(googleProvider).then(function(result) {
-		// This gives you a Google Access Token. You can use it to access the Google API.
-		googleToken = result.credential.accessToken;
-		// The signed-in user info.
-		username = result.user.email;
-		// ...
-		gapi.client.setToken({access_token : googleToken});
-		return reload_onClick();
-	}, function(error){
-		//$("#status").text('Google Sign in failed.');
-		console.log(error);
-		return Promise.reject(error);
-	}).then(function(response){
-		$("#reload").attr('disabled', false);
-		//$("#status").text('Google Sign in succeeded.');
-	}).catch(function(error){
-		//$('#status').text('Google Sign in failure. See console log for detail.');
-		console.log(error);
-	});
+    $("#status").text('');
+    $("#reload").attr('disabled', true);
+
+    //google apiの認証を使う場合
+    //アプリ登録していないと，安全でないページとか出てきていやらしい
+    //    const auth = gapi.auth2.getAuthInstance();
+    //    auth.signIn().then(function(user){
+    //		return reload_onClick();
+    //	}, function(error){
+    //		$("#status").text('Google Sign in failed.');
+    //		console.log(error);
+    //		return Promise.reject(error);
+    //	}).then(function(response){
+    //		$("#reload").attr('disabled', false);
+    //		$("#status").text('Google Sign in succeeded.');
+    //	}).catch(function(error){
+    //		$('#status').text('Google Sign in failure. See console log for detail.');
+    //		console.log(error);
+    //	});
+    
+    //firebaseの認証を使う場合
+    firebase.auth().signInWithPopup(googleProvider).then(function (result){
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        googleToken = result.credential.accessToken;
+        // The signed-in user info.
+        username = result.user.email;
+        // ...
+        gapi.client.setToken({ access_token: googleToken });
+        return reload_onClick();
+    }, function(error){
+        //$("#status").text('Google Sign in failed.');
+        console.log(error);
+        return Promise.reject(error);
+    }).then(function(response){
+        $("#reload").attr('disabled', false);
+        //$("#status").text('Google Sign in succeeded.');
+    }).catch(function(error){
+        //$('#status').text('Google Sign in failure. See console log for detail.');
+        console.log(error);
+    });
 }
 function reload_onClick(){
     //read list file
     gapi.client.sheets.spreadsheets.values.get({
-      spreadsheetId : spreadsheetId_log,
-      range: 'main!A2:F'
+        spreadsheetId: spreadsheetId_log,
+        range: 'main!A2:F'
     }).then((result)=>{
-        return new Promise((resolve,reject)=>{
-          tab_log=[];
-          //result.result.values[i][0]; //timestamp
-          //result.result.values[i][1]; //uname
-          //result.result.values[i][2]; //pid
-          //result.result.values[i][3]; //memo
-          //result.result.values[i][4]; //rating
-          //result.result.values[i][5]; //reason
-          ////自分のものだけ抽出
-          for(var i=0; result.result.values && i<result.result.values.length;++i){
-              if(result.result.values[i][1]==username){
-                  tab_log.push([
-                      result.result.values[i][0],
-                      result.result.values[i][1],
-                      result.result.values[i][2],
-                      result.result.values[i][3],
-                      result.result.values[i][4],
-                      result.result.values[i][5]
-                  ]);
-              }
-          }
+        return new Promise((resolve, reject)=>{
+            tab_log = [];
+            //result.result.values[i][0]; //timestamp
+            //result.result.values[i][1]; //uname
+            //result.result.values[i][2]; //pid
+            //result.result.values[i][3]; //memo
+            //result.result.values[i][4]; //rating
+            //result.result.values[i][5]; //reason
+            ////自分のものだけ抽出
+            for (var i = 0; result.result.values && i < result.result.values.length; ++i)
+            {
+                if (result.result.values[i][1] == username)
+                {
+                    tab_log.push([
+                        result.result.values[i][0],
+                        result.result.values[i][1],
+                        result.result.values[i][2],
+                        result.result.values[i][3],
+                        result.result.values[i][4],
+                        result.result.values[i][5]
+                    ]);
+                }
+            }
             resolve();
         });
     }).then(()=>{
         //read log file
         //timestamp,uname,pid,memo,rating,reason
         return gapi.client.sheets.spreadsheets.values.get({
-            spreadsheetId : spreadsheetId,
+            spreadsheetId: spreadsheetId,
             range: 'main!A2:C'
         });
     }).then((result)=>{
-        tab=[];
-        for(var i=0;result.result.values && i<result.result.values.length;++i){
+        regronbun_count=0;
+        tab = [];
+        for (var i = 0; result.result.values && i < result.result.values.length; ++i){
             //result.result.values[i][0]; //pid
             //result.result.values[i][1]; //url
             //result.result.values[i][2]; //uname
             ////自分の割り当ての未読のものだけ対象にする
-            if(result.result.values[i][2]==username){
+            if (result.result.values[i][2] == username){
+                ++regronbun_count;
                 //未読チェック
-                var foundidx=tab_log.findIndex((e)=>{return e[2]==result.result.values[i][0]});
-                if(foundidx==-1)
-                    tab.push([result.result.values[i][0],result.result.values[i][1],result.result.values[i][2]]);
+                var foundidx = tab_log.findIndex((e) => { return e[2] == result.result.values[i][0] });
+                if (foundidx == -1)
+                    tab.push([result.result.values[i][0], result.result.values[i][1], result.result.values[i][2]]);
             }
         }
-        tab_i=-1;
-	var bar = document.getElementById('prg');
-	var txt = document.getElementById('pct');
-	bar.value = 50-tab.length;
-	txt.value = bar.value;
+        tab_i = -1;
+        $("#allcnt").text(""+regronbun_count);
+        var bar = document.getElementById('prg');
+        var txt = document.getElementById('pct');
+        bar.max=regronbun_count;
+        bar.value = regronbun_count - tab.length;
+        txt.value = bar.value;
         next_onClick();
     }).catch((error)=>{
         console.error(error);
@@ -159,66 +168,73 @@ function reload_onClick(){
 }
 
 function progress(){
-	var bar = document.getElementById('prg');
-	var txt = document.getElementById('pct');
-	if(bar.value < bar.max){
-	++bar.value;
-	txt.value=bar.value;
-	}
-	if(bar.value == bar.max){
-		txt.value = 'Finished!';
-$("#summary_field").attr("src","");
-	}
+    var bar = document.getElementById('prg');
+    var txt = document.getElementById('pct');
+    if (bar.value < bar.max){
+        ++bar.value;
+        txt.value = bar.value;
+    }
+    if (bar.value == bar.max){
+        txt.value = 'Finished!';
+        $("#summary_field").attr("src", "");
+    }
 }
 
 function next_onClick(){
     var proc;
-    is_filled = true;
+    var is_filled = true;
 
-    if(tab_i>=0){
-      if($("#memo").val()==""||$("#reason").val()==""){
-        warn = "空欄があります";
-        alert(warn);
-        is_filled = false;
-      }else{
-        // Dateオブジェクトを作成
-        var date = new Date() ;
-        // UNIXタイムスタンプを取得する (ミリ秒単位)
-        var timestamp = date.getTime() ;
-        //保存
-        proc=gapi.client.sheets.spreadsheets.values.append({
-            spreadsheetId: "1gXzX0F7u5rDbNUIs-Ci4ip73QNjw97NwKYUJMznzAdo",
-            range: "A2:F",
-            insertDataOption: "INSERT_ROWS",
-            valueInputOption: "RAW",
-            resource: {
+    if (tab_i >= 0){
+        if ($("#memo").val() == "" || $("#reason").val() == ""){
+            alert("空欄があります．");
+            is_filled = false;
+        }else{
+            // Dateオブジェクトを作成
+            var date = new Date();
+            // UNIXタイムスタンプを取得する (ミリ秒単位)
+            var timestamp = date.getTime();
+            //保存
+            proc = gapi.client.sheets.spreadsheets.values.append({
+                spreadsheetId: spreadsheetId_log,
                 range: "A2:F",
-                majorDimension: "ROWS",
-                values: [
-                    [timestamp,username,tab[tab_i][0],$("#memo").val(),$("#rating").val(),$("#reason").val()]
-                ]
-            }
-        });
-	progress();
-}
+                insertDataOption: "INSERT_ROWS",
+                valueInputOption: "RAW",
+                resource: {
+                    range: "A2:F",
+                    majorDimension: "ROWS",
+                    values: [
+                        [timestamp, username, tab[tab_i][0], $("#memo").val(), $("#rating").val(), $("#reason").val()]
+                    ]
+                }
+            });
+        }
     }
-    else proc=Promise.resolve();
+    else proc = Promise.resolve();
     proc.then((result)=>{
-      if(is_filled ==true){
-        ++tab_i;
-      }
-        //iframeに表示
-        $("#summary_field").attr("src",tab[tab_i][1]);
-        //コンパネリセット
-        $("#memo").val("");
-        $("#rating").val("5");
-        $("#reason").val("");
+        if (is_filled) {
+            progress();
+            ++tab_i;
+            //iframeに表示
+            $("#summary_field").attr("src", tab.length>0?tab[tab_i][1]:"about:blank");
+            //コンパネリセット
+            $("#memo").val("");
+            $("#rating").val("3");
+            $("#reason").val("");
+        }
     }).catch((error)=>{
         console.error(error);
     });
 }
+
+//OnLoad
+$(()=>{
+    $("#prg").attr("max",""+regronbun_count);
+    $("#allcnt").text(""+regronbun_count);
+})
+
 </script>
 </head>
+
 <body>
 <div id="control">
 <button id="signin" onClick="signin_google_onClick();">SignIn</button>
@@ -226,20 +242,21 @@ function next_onClick(){
 memo:<input type="text" id="memo" name="memo" value="" style="width:75%" />
 </br>
 rate:<select id="rating">
-        <option id="rating_5" name="rating_5" value="5">5:読みたい</option>
-        <option id="rating_4" name="rating_4" value="4">4:どちらかというと読みたい</option>
-        <option id="rating_3" name="rating_3" value="3">3:どちらとも言えない</option>
-        <option id="rating_2" name="rating_2" value="2">2:どちらかというと読みたくない</option>
-        <option id="rating_1" name="rating_1" value="1">1:読みたくない</option>
+    <option id="rating_5" name="rating_5" value="5">5:読みたい</option>
+    <option id="rating_4" name="rating_4" value="4">4:どちらかというと読みたい</option>
+    <option id="rating_3" name="rating_3" value="3" selected>3:どちらとも言えない</option>
+    <option id="rating_2" name="rating_2" value="2">2:どちらかというと読みたくない</option>
+    <option id="rating_1" name="rating_1" value="1">1:読みたくない</option>
 </select>
 </br>
 reason:<input type="text" id="reason" name="reason" value="" style="width:75%" />
 </br>
 <button id="next" onClick="next_onClick();">next</button>
 </div>
-<p>Reading progress:
-<progress id="prg" max="50" value="0"> 0% </progress>
-	:<output id="pct">0</output>/50</p>
+<p>
+Reading progress:<progress id="prg" max="50" value="0"> 0% </progress> :<output id="pct">0</output>/<span id="allcnt">50</span>
+</p>
 <iframe id="summary_field" src="about:blank" style="width:100%;height:100%"></iframe>
 </body>
+
 </html>
