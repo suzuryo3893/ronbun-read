@@ -155,6 +155,7 @@ function reload_onClick(){
             }
         }
         tab_i = -1;
+        $("#allcnt").text(""+regronbun_count);
         var bar = document.getElementById('prg');
         var txt = document.getElementById('pct');
         bar.max=regronbun_count;
@@ -217,7 +218,7 @@ function next_onClick(){
             $("#summary_field").attr("src", tab.length>0?tab[tab_i][1]:"about:blank");
             //コンパネリセット
             $("#memo").val("");
-            $("#rating").val("5");
+            $("#rating").val("3");
             $("#reason").val("");
         }
     }).catch((error)=>{
@@ -243,7 +244,7 @@ memo:<input type="text" id="memo" name="memo" value="" style="width:75%" />
 rate:<select id="rating">
     <option id="rating_5" name="rating_5" value="5">5:読みたい</option>
     <option id="rating_4" name="rating_4" value="4">4:どちらかというと読みたい</option>
-    <option id="rating_3" name="rating_3" value="3">3:どちらとも言えない</option>
+    <option id="rating_3" name="rating_3" value="3" selected>3:どちらとも言えない</option>
     <option id="rating_2" name="rating_2" value="2">2:どちらかというと読みたくない</option>
     <option id="rating_1" name="rating_1" value="1">1:読みたくない</option>
 </select>
